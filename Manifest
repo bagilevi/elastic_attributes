@@ -1,0 +1,5 @@
+Manifest
+README.rdoc
+Rakefile
+lib/elastic_attributes.rb
+spec/elastic_attributes_spec.rb

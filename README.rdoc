@@ -1,0 +1,43 @@
+= Elastic attributes
+
+Flexible attribute mapper. Input any ruby structure, map sub-structures to specified classes.
+
+Can be used to map decoded JSON structures to objects, e.g. with document-oriented databases or JSON APIs.
+
+== Examples
+
+  class Person
+    include ElasticAttributes
+    attribute :name, :is_default => true
+  end
+
+  class City
+    include ElasticAttributes
+    attribute :name, :is_default => true
+    attribute :mayor, Person
+  end
+  
+  class Country
+    include ElasticAttributes
+    attribute :name, :is_default => true
+    attribute :cities, [Array, City] # Array of Cities
+  end
+  
+  Country.from( 'Hungary' )
+  Country.from( {'name' => 'Hungary'} )
+  Country.from( {'name' => 'Hungary', 'cities' => ['Budapest', 'Miskolc', 'Debrecen']} )
+  Country.from( {'name' => 'Hungary', 'cities' => [{'name' => 'Budapest', 'mayor' => 'Demszky Gabor'},
+                                                   'Miskolc', 
+                                                   'Debrecen']} )
+  City.from( {'name' => 'Budapest', 'mayor' => 'Demszky Gabor'} )
+  city = City.from( {'name' => 'Budapest', 'mayor' => {'name' => 'Demszky Gabor'}} )
+  
+  city.encode # => {"name"=>"Budapest", "mayor"=>"Demszky Gabor"} 
+
+== Installation
+
+  gem install elastic_attributes
+  
+== License
+
+http://sam.zoy.org/wtfpl/
